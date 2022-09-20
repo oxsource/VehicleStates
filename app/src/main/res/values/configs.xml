@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="car_server_provider_authorities">vendor.car.server.provider</string>
+
+    <string-array name="grant_packages">
+        <item>grant_package_system_ui</item>
+        <item>grant_package_system_setting</item>
+        <item>grant_package_havc_control</item>
+        <item>grant_package_seat_control</item>
+        <item>grant_package_test_control</item>
+    </string-array>
+
+    <!--    system ui-->
+    <string-array name="grant_package_system_ui">
+        <item>com.android.system.ui</item>
+        <item>abc.**;rw</item>
+        <item>xyz.**;r</item>
+    </string-array>
+
+    <!--    系统设置-->
+    <string-array name="grant_package_system_setting">
+        <item>com.android.system.setting</item>
+        <item>abc.**;rw</item>
+        <item>xyz.**;r</item>
+    </string-array>
+
+    <!--    空调控制-->
+    <string-array name="grant_package_havc_control">
+        <item>com.android.havc.control</item>
+        <item>abc.**;rw</item>
+        <item>xyz.**;r</item>
+    </string-array>
+
+    <!--    座椅控制-->
+    <string-array name="grant_package_seat_control">
+        <item>com.android.seat.control</item>
+        <item>abc.**;rw</item>
+        <item>xyz.**;r</item>
+    </string-array>
+
+    <!--    测试应用-->
+    <string-array name="grant_package_test_control">
+        <item>vendor.car.tclient</item>
+        <item>havc_speed*;rw</item>
+    </string-array>
+</resources>
