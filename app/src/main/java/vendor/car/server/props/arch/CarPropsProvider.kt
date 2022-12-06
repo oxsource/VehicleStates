@@ -1,20 +1,35 @@
 package vendor.car.server.props.arch
 
+import android.car.Car
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.util.Log
+import vendor.car.server.props.CarPropsClient
 import vendor.car.server.props.impl.HAVCModule
 import java.io.FileDescriptor
 import java.io.PrintWriter
 
-class CarPropsProvider : ContentProvider() {
-    private val debuggable = Log.isLoggable(TAG, Log.DEBUG)
+class CarPropsProvider : ContentProvider(), CarPropsModule.Callback {
+    companion object {
+        private const val TAG = "CarProps.Provider"
+//        private val DEBUG = Log.isLoggable(TAG, Log.DEBUG)
+        private val DEBUG = true
+    }
+
     private val modules: MutableList<CarPropsModule> = mutableListOf()
 
     override fun onCreate(): Boolean {
-        modules.add(HAVCModule())
+        modules.add(HAVCModule(callback = this))
+        Car.createCar(context, null, Car.CAR_WAIT_TIMEOUT_WAIT_FOREVER) { car, success ->
+            Log.d(TAG, "onLifecycleChanged: $car, $success")
+            if (null != car) {
+                modules.forEach { it.onConnected(car) }
+            } else {
+                modules.forEach { it.onDisconnected() }
+            }
+        }
         return true
     }
 
@@ -34,7 +49,7 @@ class CarPropsProvider : ContentProvider() {
     ): Cursor? {
         return kotlin.runCatching {
             val who = module(uri = uri, readonly = true)
-            if (debuggable) Log.d(TAG, "query uri `$uri`")
+            if (DEBUG) Log.d(TAG, "query uri `$uri`")
             return@runCatching who.get(uri, projection, selection, selectionArgs, sortOrder)
         }.onFailure {
             Log.e(TAG, "query exception!! ${it.message}")
@@ -60,10 +75,8 @@ class CarPropsProvider : ContentProvider() {
         selectionArgs: Array<out String>?
     ): Int = kotlin.runCatching {
         val who = module(uri = uri, readonly = false)
-        if (debuggable) Log.d(TAG, "update uri `$uri`")
-        val rows = who.set(uri, value, selection, selectionArgs)
-        if (rows > 0) context?.contentResolver?.notifyChange(uri, null)
-        return@runCatching rows
+        if (DEBUG) Log.d(TAG, "update uri `$uri`")
+        return@runCatching who.set(uri, value, selection, selectionArgs)
     }.onFailure {
         Log.e(TAG, "update exception!! ${it.message}")
         it.printStackTrace()
@@ -78,7 +91,8 @@ class CarPropsProvider : ContentProvider() {
         modules.forEach { writer?.println(it.dump()) }
     }
 
-    companion object {
-        private const val TAG = "CarProps.Provider"
+    override fun notifyChange(path: String) {
+        val uri = CarPropsClient.compose(path)
+        context?.contentResolver?.notifyChange(uri, null, 0)
     }
 }

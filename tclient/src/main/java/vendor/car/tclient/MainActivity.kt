@@ -18,17 +18,16 @@ class MainActivity : AppCompatActivity() {
         val vText: TextView = findViewById(R.id.vText)
         vText.setOnClickListener {
             val values = ContentValues()
-            values.put(CarPropsKeys.KEY_VALUE, System.currentTimeMillis())
-            values.put(CarPropsKeys.KEY_AREA, 0)
-            client.set(context = applicationContext, CarPropsKeys.HAVC_P1, values)
+            values.put(CarPropsKeys.KEY_VALUE, 1)
+            client.set(context = applicationContext, CarPropsKeys.HAVC_SPEED, values)
         }
-        client.observe(applicationContext, CarPropsKeys.HAVC_P1) { selfChange, uri ->
+        client.observe(applicationContext, CarPropsKeys.HAVC_SPEED) { selfChange, uri ->
             Log.d(TAG, "selfChang=$selfChange, uri=${uri?.path}")
-            client.get(context = applicationContext, CarPropsKeys.HAVC_P1) {
+            client.get(context = applicationContext, CarPropsKeys.HAVC_SPEED) {
                 if (it?.moveToFirst() != true) return@get
                 val index = it.getColumnIndexOrThrow(CarPropsKeys.KEY_VALUE)
                 val value = it.getLongOrNull(index)
-                Log.d(TAG, "get value of `${CarPropsKeys.HAVC_P1}` is $value")
+                Log.d(TAG, "get value of `${CarPropsKeys.HAVC_SPEED}` is $value")
             }
         }
     }

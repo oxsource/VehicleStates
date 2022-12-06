@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="vendor.car.server">
 
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_CLIMATE" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"

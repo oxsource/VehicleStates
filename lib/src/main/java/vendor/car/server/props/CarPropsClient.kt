@@ -14,10 +14,6 @@ class CarPropsClient {
     private val observers: MutableMap<String, ContentObserver> = mutableMapOf()
     private val handler = Handler(Looper.getMainLooper())
 
-    private fun compose(path: String): Uri {
-        return Uri.parse("${ContentResolver.SCHEME_CONTENT}://${CarPropsKeys.AUTHORITIES}/$path")
-    }
-
     fun set(context: Context, path: String, values: ContentValues): Result<Int> =
         kotlin.runCatching {
             val uri = compose(path)
@@ -70,5 +66,8 @@ class CarPropsClient {
 
     companion object {
         private const val TAG = "CarProps.Client"
+        fun compose(path: String): Uri {
+            return Uri.parse("${ContentResolver.SCHEME_CONTENT}://${CarPropsKeys.AUTHORITIES}/$path")
+        }
     }
 }
