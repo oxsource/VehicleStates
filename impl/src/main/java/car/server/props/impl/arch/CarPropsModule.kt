@@ -1,4 +1,4 @@
-package vendor.car.server.props.arch
+package car.server.props.impl.arch
 
 import android.car.Car
 import android.content.ContentValues

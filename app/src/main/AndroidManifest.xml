@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <provider
-            android:name=".props.arch.CarPropsProvider"
+            android:name="car.server.props.impl.arch.CarPropsProvider"
             android:authorities="@string/car_server_provider_authorities"
             android:enabled="true"
             android:exported="true"

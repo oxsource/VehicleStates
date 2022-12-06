@@ -1,4 +1,4 @@
-package vendor.car.server.props.arch
+package car.server.props.impl.arch
 
 import android.car.Car
 import android.content.ContentProvider
@@ -6,21 +6,22 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.util.Log
+import car.server.props.impl.module.EchoModule
+import car.server.props.impl.module.HAVCModule
 import vendor.car.server.props.CarPropsClient
-import vendor.car.server.props.impl.HAVCModule
 import java.io.FileDescriptor
 import java.io.PrintWriter
 
 class CarPropsProvider : ContentProvider(), CarPropsModule.Callback {
     companion object {
         private const val TAG = "CarProps.Provider"
-//        private val DEBUG = Log.isLoggable(TAG, Log.DEBUG)
-        private val DEBUG = true
+        private val DEBUG = Log.isLoggable(TAG, Log.DEBUG)
     }
 
     private val modules: MutableList<CarPropsModule> = mutableListOf()
 
     override fun onCreate(): Boolean {
+        modules.add(EchoModule())
         modules.add(HAVCModule(callback = this))
         Car.createCar(context, null, Car.CAR_WAIT_TIMEOUT_WAIT_FOREVER) { car, success ->
             Log.d(TAG, "onLifecycleChanged: $car, $success")

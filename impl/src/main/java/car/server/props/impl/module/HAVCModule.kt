@@ -1,4 +1,4 @@
-package vendor.car.server.props.impl
+package car.server.props.impl.module
 
 import android.car.Car
 import android.car.hardware.CarPropertyValue
@@ -10,9 +10,9 @@ import android.database.MatrixCursor
 import android.net.Uri
 import android.util.Log
 import vendor.car.server.props.CarPropsKeys
-import vendor.car.server.props.arch.CarPropsModule
 
-class HAVCModule(private val callback: CarPropsModule.Callback) : CarPropsModule {
+class HAVCModule(private val callback: car.server.props.impl.arch.CarPropsModule.Callback) :
+    car.server.props.impl.arch.CarPropsModule {
     private val caches: MutableMap<String, Any?> = mutableMapOf()
     private val matcher = UriMatcher(UriMatcher.NO_MATCH).apply {
         addURI(CarPropsKeys.AUTHORITIES, CarPropsKeys.HAVC_SPEED, 1)

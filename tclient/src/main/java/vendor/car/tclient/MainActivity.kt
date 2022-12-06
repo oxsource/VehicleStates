@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val vText: TextView = findViewById(R.id.vText)
+        client.get(applicationContext, CarPropsKeys.ECHO)
+        //
         vText.setOnClickListener {
             val values = ContentValues()
             values.put(CarPropsKeys.KEY_VALUE, 1)

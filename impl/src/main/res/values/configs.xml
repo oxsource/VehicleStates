@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="car_server_provider_authorities" />
+    <string-array name="grant_packages" />
+    <string-array name="grant_allow_path">
+        <item>echo</item>
+    </string-array>
+</resources>

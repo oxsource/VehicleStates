@@ -16,3 +16,4 @@ rootProject.name = "VehicleStates"
 include ':app'
 include ':lib'
 include ':tclient'
+include ':impl'

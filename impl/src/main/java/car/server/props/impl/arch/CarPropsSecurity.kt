@@ -1,14 +1,15 @@
-package vendor.car.server.props.arch
+package car.server.props.impl.arch
 
 import android.content.ContentProvider
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import vendor.car.server.R
+import car.server.props.impl.R
 
 object CarPropsSecurity {
     private const val TAG = "CarProps.Security"
     private val identifies: MutableMap<String, Set<String>> = mutableMapOf()
+    private val allowPaths: MutableList<String> = mutableListOf()
 
     @Throws(Exception::class)
     fun check(provider: ContentProvider, uri: Uri, readonly: Boolean) {
@@ -20,7 +21,8 @@ object CarPropsSecurity {
         // 校验调用包
         val rules = identifies[caller] ?: throw Exception("not support for caller `$caller`")
         // 校验 URI 读写权限
-        val path = uri.path?.replace("/", "")?.trim()
+        val path = uri.path?.replace(CarPropsModule.PATH_SPLIT, "")?.trim()
+        if (allowPaths.contains(path)) return
         if (path.isNullOrEmpty()) throw Exception("request path is null or empty")
         val item = rules.find { it.startsWith(path) }
             ?: throw Exception("no grant on `$path` for `$caller`")
@@ -50,5 +52,6 @@ object CarPropsSecurity {
             }.getOrNull()
         }
         identifies.putAll(values)
+        allowPaths.addAll(resources.getStringArray(R.array.grant_allow_path))
     }
 }

@@ -22,7 +22,7 @@ class CarPropsClient {
             Log.e(TAG, "set exception!! ${it.message}")
         }
 
-    fun get(context: Context, path: String, block: (Cursor?) -> Unit): Result<Unit> =
+    fun get(context: Context, path: String, block: (Cursor?) -> Unit = {}): Result<Unit> =
         kotlin.runCatching {
             val uri = compose(path)
             context.contentResolver.query(uri, null, null, null, null).use(block)
